@@ -52,21 +52,19 @@ The investigation reviewed:
 
 ## Test Case 2: Denied API Activity
 
-A least-privilege policy blocked a console-initiated EC2 API request.
+### Least-Privilege Policy
 
-| Field | Value |
-|---|---|
-| Event source | `ec2.amazonaws.com` |
-| Event name | `DescribeRegions` |
-| Region | `us-east-2` |
-| Error code | `Client.UnauthorizedOperation` |
-| Event type | `AwsApiCall` |
-| Management event | `true` |
-| Read only | `true` |
+The lab identity was assigned a policy granting only read access to selected
+CloudWatch metric actions:
 
-This event confirmed that CloudTrail captured a denied API request and provided
-the information needed to identify the principal, attempted action, Region,
-and authorization failure.
+- `cloudwatch:GetMetricData`
+- `cloudwatch:ListMetrics`
+
+The policy did not grant `ec2:DescribeRegions`. AWS therefore implicitly denied
+the console-initiated EC2 request, which CloudTrail logged with
+`Client.UnauthorizedOperation`.
+
+See [sanitized policy](policies/cloudsec-lab-admin-policy.json).
 
 
 ## Detection Logic
