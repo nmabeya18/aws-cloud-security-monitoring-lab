@@ -1,1 +1,12 @@
-
+fields @timestamp, eventName, userIdentity.arn, sourceIPAddress, awsRegion, errorCode
+| filter eventSource = "iam.amazonaws.com"
+| filter eventName in [
+  "ListUsers",
+  "ListGroups",
+  "ListRoles",
+  "ListAccessKeys",
+  "ListMFADevices",
+  "GetAccountSummary"
+]
+| sort @timestamp desc
+| limit 50
