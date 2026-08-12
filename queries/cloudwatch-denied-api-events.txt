@@ -1,1 +1,5 @@
-
+fields @timestamp, eventSource, eventName, userIdentity.arn, sourceIPAddress, errorCode, errorMessage
+| filter ispresent(errorCode)
+| filter errorCode like /AccessDenied|UnauthorizedOperation/
+| sort @timestamp desc
+| limit 50
